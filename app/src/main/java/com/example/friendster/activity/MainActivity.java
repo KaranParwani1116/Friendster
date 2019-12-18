@@ -1,4 +1,4 @@
-package activity;
+package com.example.friendster.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,12 +28,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
-import Frsgments.FriendsFragment;
-import Frsgments.NewsFeedFragment;
-import Frsgments.NotificationFragment;
+import com.example.friendster.Frsgments.FriendsFragment;
+import com.example.friendster.Frsgments.NewsFeedFragment;
+import com.example.friendster.Frsgments.NotificationFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import utils.BottomNavigationViewHelper;
+import com.example.friendster.utils.BottomNavigationViewHelper;
 
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar_title)
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.profile_fragment:
-                        startActivity(new Intent(MainActivity.this,ProfileActivity.class));
+                        startActivity(new Intent(MainActivity.this,ProfileActivity.class).putExtra("uid",FirebaseAuth.getInstance().getCurrentUser().getUid()));
                         break;
 
                     case R.id.profile_friends:

@@ -1,4 +1,4 @@
-package utils;
+package com.example.friendster.utils;
 
 import android.annotation.SuppressLint;
 import android.util.Log;

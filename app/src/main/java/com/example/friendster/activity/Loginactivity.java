@@ -1,4 +1,4 @@
-package activity;
+package com.example.friendster.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,8 +25,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
-import rest.ApiClient;
-import rest.services.request;
+import com.example.friendster.rest.ApiClient;
+import com.example.friendster.rest.services.request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

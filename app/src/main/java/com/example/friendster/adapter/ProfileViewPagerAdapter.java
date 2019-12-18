@@ -1,6 +1,4 @@
-package adapter;
-
-import android.widget.Switch;
+package com.example.friendster.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,7 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import Frsgments.ProfileFragment;
+import com.example.friendster.Frsgments.ProfileFragment;
 
 public class ProfileViewPagerAdapter extends FragmentPagerAdapter {
     private int size=0;

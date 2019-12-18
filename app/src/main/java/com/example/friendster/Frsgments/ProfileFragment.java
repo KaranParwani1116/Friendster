@@ -1,4 +1,4 @@
-package Frsgments;
+package com.example.friendster.Frsgments;
 
 
 import android.content.Context;
@@ -13,15 +13,13 @@ import android.view.ViewGroup;
 
 import com.example.friendster.R;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class FriendsFragment extends Fragment {
+
+public class ProfileFragment extends Fragment {
 
     private Context context;
 
-    public FriendsFragment() {
-        // Required empty public constructor
+    public ProfileFragment() {
+
     }
 
     @Override
@@ -30,12 +28,11 @@ public class FriendsFragment extends Fragment {
         this.context=context;
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_friends, container, false);
+        return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
 }

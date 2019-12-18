@@ -1,4 +1,4 @@
-package rest;
+package com.example.friendster.rest;
 
 import android.app.Activity;
 
