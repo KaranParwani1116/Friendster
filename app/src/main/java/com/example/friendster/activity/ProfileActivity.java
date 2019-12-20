@@ -1,5 +1,6 @@
 package com.example.friendster.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,12 +10,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
+import com.esafirm.imagepicker.features.ImagePicker;
+import com.esafirm.imagepicker.model.Image;
 import com.example.friendster.R;
 import com.example.friendster.adapter.ProfileViewPagerAdapter;
 import com.example.friendster.model.User;
@@ -26,17 +32,23 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements DialogInterface.OnDismissListener {
     private static final String TAG = "ProfileActivity";
 
 
@@ -60,6 +72,8 @@ public class ProfileActivity extends AppCompatActivity {
     RelativeLayout viewPagerLayout;
 
     ProfileViewPagerAdapter profileViewPagerAdapter;
+    File Compressedimagefile;
+
     String uid = "0";
 
     /*
@@ -76,6 +90,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     /*
     two variables ccver url and profileurl to fetch image from url using using picasso
+     */
+
+    int imageuploadtype=0;
+    /*
+    0 for profile image
+    1 for cover image
      */
 
     String coverurl = "", profileurl = "";
@@ -116,7 +136,47 @@ public class ProfileActivity extends AppCompatActivity {
         } else {
             //we have opened our another person profile
         }
+
+        //edit profile button
+        profileOptionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(curentstate == 5)
+                {
+                    CharSequence options[] = new CharSequence[]{"Change Cover Profile", "Change Profile Picture", "View Cover Picture", " View Profile Picture"};
+                    AlertDialog.Builder builder = CreateAlertdialog(options);
+                    AlertDialog alertDialog=builder.create();
+                    alertDialog.show();
+                }
+            }
+        });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(ImagePicker.shouldHandle(requestCode,resultCode,data)){
+            Image selectedimage=ImagePicker.getFirstImageOrNull(data);
+
+            try {
+                Compressedimagefile=new Compressor(this)
+                        .setQuality(75)
+                        .compressToFile(new File(selectedimage.getPath()));
+
+                uploadfile(Compressedimagefile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialogInterface) {
+
+    }
+
 
     private void loadprofile() {
         request Request = ApiClient.getApiClient().create(request.class);
@@ -138,7 +198,7 @@ public class ProfileActivity extends AppCompatActivity {
                     collapsingToolbar.setTitle(response.body().getName());
 
                     if (!profileurl.isEmpty()) {
-                        Picasso.get().load(profileurl).networkPolicy(NetworkPolicy.OFFLINE).into(profileImage, new com.squareup.picasso.Callback() {
+                        Picasso.get().load(profileurl).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.progress).into(profileImage, new com.squareup.picasso.Callback() {
                             @Override
                             public void onSuccess() {
 
@@ -146,13 +206,13 @@ public class ProfileActivity extends AppCompatActivity {
 
                             @Override
                             public void onError(Exception e) {
-                                Picasso.get().load(profileurl).into(profileImage);
+                                Picasso.get().load(profileurl).placeholder(R.drawable.progress).into(profileImage);
                             }
                         });
                     }
 
                     if (!coverurl.isEmpty()) {
-                        Picasso.get().load(coverurl).networkPolicy(NetworkPolicy.OFFLINE).into(profileCover, new com.squareup.picasso.Callback() {
+                        Picasso.get().load(coverurl).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.progress).into(profileCover, new com.squareup.picasso.Callback() {
                             @Override
                             public void onSuccess() {
 
@@ -160,7 +220,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                             @Override
                             public void onError(Exception e) {
-                                Picasso.get().load(coverurl).into(profileCover);
+                                Picasso.get().load(coverurl).placeholder(R.drawable.progress).into(profileCover);
                             }
                         });
                     }
@@ -172,6 +232,111 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(ProfileActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private AlertDialog.Builder CreateAlertdialog(CharSequence[] options) {
+        AlertDialog.Builder builder=new AlertDialog.Builder(ProfileActivity.this);
+        builder.setOnDismissListener(ProfileActivity.this);
+        builder.setTitle("Choose Options");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                switch (i)
+                {
+                    case 0:
+                        imageuploadtype=1;
+                        ImagePicker.create(ProfileActivity.this)
+                                .folderMode(true)
+                                .toolbarFolderTitle("Choose a folder")
+                                .toolbarImageTitle("Select a image")
+                                .start();
+                        //load cover profile
+                        break;
+
+                    case 1:
+                        imageuploadtype=0;
+                        ImagePicker.create(ProfileActivity.this)
+                                .folderMode(true)
+                                .toolbarFolderTitle("Choose a folder")
+                                .toolbarImageTitle("Select a image")
+                                .start();
+                        //load profile picture
+                        break;
+
+                    case 2:
+                        //view cover picture
+                        break;
+
+                    case 3:
+                        //view profile picture
+                        break;
+                }
+            }
+        });
+        return builder;
+    }
+
+    private void uploadfile(File compressedimagefile) {
+        MultipartBody.Builder builder = new MultipartBody.Builder();
+        builder.setType(MultipartBody.FORM);
+
+        builder.addFormDataPart("postUserId",FirebaseAuth.getInstance().getCurrentUser().getUid());
+        builder.addFormDataPart("imageuploadtype",imageuploadtype+"");
+        builder.addFormDataPart("file",Compressedimagefile.getName(), RequestBody.create(MediaType.parse("multipart/form-data"),Compressedimagefile));
+
+
+        MultipartBody multipartBody=builder.build();
+
+        request Request= ApiClient.getApiClient().create(request.class);
+        Call<Integer>req=Request.uploadImage(multipartBody);
+        req.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+
+                if(response.body()!=null && response.body()==1)
+                {
+                   if(imageuploadtype==0)
+                   {
+                       Picasso.get().load(Compressedimagefile).placeholder(R.drawable.progress).networkPolicy(NetworkPolicy.OFFLINE).into(profileImage, new com.squareup.picasso.Callback() {
+                           @Override
+                           public void onSuccess() {
+
+                           }
+
+                           @Override
+                           public void onError(Exception e) {
+                               Picasso.get().load(Compressedimagefile).placeholder(R.drawable.progress).into(profileImage);
+                           }
+                       });
+                       Toast.makeText(ProfileActivity.this,"Profile picture changed successfully",Toast.LENGTH_SHORT).show();
+                   }
+                   else if(imageuploadtype==1) {
+                       Picasso.get().load(Compressedimagefile).placeholder(R.drawable.progress).networkPolicy(NetworkPolicy.OFFLINE).into(profileCover, new com.squareup.picasso.Callback() {
+                           @Override
+                           public void onSuccess() {
+
+                           }
+
+                           @Override
+                           public void onError(Exception e) {
+                               Picasso.get().load(Compressedimagefile).placeholder(R.drawable.progress).into(profileCover);
+                           }
+                       });
+                       Toast.makeText(ProfileActivity.this,"Profile Cover changed successfully",Toast.LENGTH_SHORT).show();
+                   }
+                }
+                else
+                {
+                    Toast.makeText(ProfileActivity.this,"Something Went Wrong",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                Toast.makeText(ProfileActivity.this,"Somethhing went wrong",Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -5,6 +5,7 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.example.friendster"
         minSdkVersion 15
         targetSdkVersion 29
@@ -20,6 +21,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        packagingOptions {
+            exclude 'META-INF/rxjava.properties'
         }
     }
 }
@@ -49,4 +53,13 @@ dependencies {
 
     //picasso dependency
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    //imagepicker,compressor and easypermissions
+    implementation 'com.github.esafirm.android-image-picker:imagepicker:2.2.0'
+    implementation 'com.github.esafirm.android-image-picker:rximagepicker:2.2.0'
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    implementation 'pub.devrel:easypermissions:3.0.0'
+    implementation 'id.zelory:compressor:2.1.0'
+
+    implementation 'com.android.support:multidex:1.0.3'
 }

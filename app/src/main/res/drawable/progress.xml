@@ -3,7 +3,7 @@
     android:pivotX="50%" android:pivotY="50%" android:fromDegrees="0"
     android:toDegrees="1440"
     android:duration="1">
-    <shape android:shape="ring" android:innerRadiusRatio="3"
+    <shape android:shape="ring" android:innerRadiusRatio="8"
         android:useLevel="false"
         android:thickness="1dp">
 

@@ -5,6 +5,7 @@ import com.example.friendster.model.User;
 
 import java.util.Map;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -18,4 +19,12 @@ public interface request {
 
     @GET("loadownprofile")
     Call<User>loadownProfile(@QueryMap Map<String,String> params);
+
+    @POST("poststatus")
+    Call<Integer> uploadstatus(@Body MultipartBody requestbody);
+
+    @POST("uploadImage")
+    Call<Integer> uploadImage(@Body MultipartBody requestbody);
+
+
 }
