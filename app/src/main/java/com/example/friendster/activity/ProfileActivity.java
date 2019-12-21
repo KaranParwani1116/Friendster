@@ -1,8 +1,11 @@
 package com.example.friendster.activity;
 
+import android.app.ActivityOptions;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -74,6 +77,7 @@ public class ProfileActivity extends AppCompatActivity implements DialogInterfac
     ProfileViewPagerAdapter profileViewPagerAdapter;
     File Compressedimagefile;
 
+
     String uid = "0";
 
     /*
@@ -143,7 +147,7 @@ public class ProfileActivity extends AppCompatActivity implements DialogInterfac
             public void onClick(View view) {
                 if(curentstate == 5)
                 {
-                    CharSequence options[] = new CharSequence[]{"Change Cover Profile", "Change Profile Picture", "View Cover Picture", " View Profile Picture"};
+                    CharSequence options[] = new CharSequence[]{"Change Cover Profile", "Change Profile Picture"};
                     AlertDialog.Builder builder = CreateAlertdialog(options);
                     AlertDialog alertDialog=builder.create();
                     alertDialog.show();
@@ -227,11 +231,28 @@ public class ProfileActivity extends AppCompatActivity implements DialogInterfac
                 } else {
                     Toast.makeText(ProfileActivity.this, "Something Went Wrong........Please try again later", Toast.LENGTH_SHORT).show();
                 }
+                addImageCoverClick();
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(ProfileActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void addImageCoverClick() {
+        profileCover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewFullImage(profileCover,coverurl);
+            }
+        });
+
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewFullImage(profileImage,profileurl);
             }
         });
     }
@@ -264,14 +285,6 @@ public class ProfileActivity extends AppCompatActivity implements DialogInterfac
                                 .toolbarImageTitle("Select a image")
                                 .start();
                         //load profile picture
-                        break;
-
-                    case 2:
-                        //view cover picture
-                        break;
-
-                    case 3:
-                        //view profile picture
                         break;
                 }
             }
@@ -339,5 +352,23 @@ public class ProfileActivity extends AppCompatActivity implements DialogInterfac
                 Toast.makeText(ProfileActivity.this,"Somethhing went wrong",Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void viewFullImage(View view, String url) {
+
+       Intent intent = new Intent(ProfileActivity.this, FullImageActivity.class);
+       intent.putExtra("imageurl", url);
+
+       Pair[] pairs = new Pair[1];
+       pairs[0] = new Pair<View,String>(view, "shared");
+
+        ActivityOptions options = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            options = ActivityOptions.makeSceneTransitionAnimation(ProfileActivity.this,pairs);
+            startActivity(intent, options.toBundle());
+        }
+        else {
+            startActivity(intent);
+        }
     }
 }

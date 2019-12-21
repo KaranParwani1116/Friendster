@@ -12,16 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/customTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name="com.example.friendster.activity.UploadActivty" />
-        <activity android:name="com.example.friendster.activity.ProfileActivity" />
-        <activity android:name="com.example.friendster.activity.Loginactivity">
+        <activity android:name=".activity.FullImageActivity"></activity>
+        <activity android:name=".activity.UploadActivty" />
+        <activity android:name=".activity.ProfileActivity" />
+        <activity android:name=".activity.Loginactivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.friendster.activity.MainActivity" />
+        <activity android:name=".activity.MainActivity" />
     </application>
 
 </manifest>
