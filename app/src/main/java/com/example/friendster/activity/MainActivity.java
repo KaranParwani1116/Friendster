@@ -93,7 +93,12 @@ public class MainActivity extends AppCompatActivity {
         onclicklistenerbottomnavigation();
 
         onclicklistenerfab();
+
+        //setting click listener for searchview
+
+        searchclicklistener();
     }
+
 
 
     @Override
@@ -183,6 +188,16 @@ public class MainActivity extends AppCompatActivity {
              startActivity(new Intent(MainActivity.this,UploadActivty.class));
          }
      });
+    }
+
+    private void searchclicklistener() {
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }

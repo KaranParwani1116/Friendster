@@ -3,6 +3,7 @@ package com.example.friendster.rest.services;
 import com.example.friendster.activity.Loginactivity;
 import com.example.friendster.model.User;
 
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
@@ -25,6 +26,9 @@ public interface request {
 
     @POST("uploadImage")
     Call<Integer> uploadImage(@Body MultipartBody requestbody);
+
+    @GET("search")
+    Call<List<User>>search(@QueryMap Map<String,String> params);
 
 
 }

@@ -12,7 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/customTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.FullImageActivity"></activity>
+        <activity android:name=".activity.SearchActivity">
+
+        </activity>
+        <activity android:name=".activity.FullImageActivity" />
         <activity android:name=".activity.UploadActivty" />
         <activity android:name=".activity.ProfileActivity" />
         <activity android:name=".activity.Loginactivity">
@@ -23,6 +26,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MainActivity" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

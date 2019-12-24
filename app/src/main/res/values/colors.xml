@@ -5,5 +5,8 @@
     <color name="colorAccent">#333</color>
     <color name="white">#ffffff</color>
     <color name="hint_color">#70625b</color>
+    <color name="login">#000000</color>
+    <color name="gradientend">#707070</color>
+    <color name="grey">#707070</color>
 
 </resources>

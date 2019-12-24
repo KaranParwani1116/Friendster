@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.friendster.R;
@@ -37,14 +38,14 @@ public class Loginactivity extends AppCompatActivity {
 
     private GoogleSignInClient mGoogle;
     private FirebaseAuth mAuth;
-    private SignInButton signInButton;
+    private ImageView signInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginactivity);
 
-        signInButton=(SignInButton)findViewById(R.id.signinbutton);
+        signInButton=(ImageView) findViewById(R.id.signinbutton);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))

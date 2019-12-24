@@ -35,6 +35,7 @@
                     android:layout_gravity="center"
                     android:text="FriendSter"
                     android:textColor="#000" />
+
                 <ImageView
                     android:id="@+id/search"
                     android:layout_width="24dp"
