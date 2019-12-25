@@ -201,6 +201,48 @@ public class ProfileActivity extends AppCompatActivity implements DialogInterfac
                     AlertDialog alertDialog=builder.create();
                     alertDialog.show();
                 }
+                else if(curentstate == 3)
+                {
+                    profileOptionBtn.setText("Processing...");
+                    profileOptionBtn.setEnabled(false);
+                    CharSequence options[] = new CharSequence[]{"Accept Friend Request"};
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+                    builder.setOnDismissListener(ProfileActivity.this);
+                    builder.setTitle("Choose Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if(i==0)
+                            {
+                                performaction(curentstate);
+                            }
+                        }
+                    });
+
+                    AlertDialog alertDialog=builder.create();
+                    alertDialog.show();
+                }
+                else if(curentstate == 1)
+                {
+                    profileOptionBtn.setText("Processing...");
+                    profileOptionBtn.setEnabled(false);
+                    CharSequence options[] = new CharSequence[]{"Unfriend"};
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+                    builder.setOnDismissListener(ProfileActivity.this);
+                    builder.setTitle("Choose Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if(i==0)
+                            {
+                                performaction(curentstate);
+                            }
+                        }
+                    });
+
+                    AlertDialog alertDialog=builder.create();
+                    alertDialog.show();
+                }
             }
         });
     }
@@ -492,7 +534,7 @@ public class ProfileActivity extends AppCompatActivity implements DialogInterfac
                {
                    if(i==4)
                    {
-                       curentstate=3;
+                       curentstate=2;
                        profileOptionBtn.setText("Requested");
                        Toast.makeText(ProfileActivity.this, "Request Sent Successfully", Toast.LENGTH_SHORT).show();
 
@@ -503,7 +545,15 @@ public class ProfileActivity extends AppCompatActivity implements DialogInterfac
                        profileOptionBtn.setText("Send Request");
                        Toast.makeText(ProfileActivity.this, "Request cancelled successfully", Toast.LENGTH_SHORT).show();
                    }
-
+                   else if(i==3) {
+                       curentstate = 1;
+                       profileOptionBtn.setText("Friends");
+                       Toast.makeText(ProfileActivity.this, "You sre Friends on Friendster now !!", Toast.LENGTH_SHORT).show();
+                   }else if(i==1) {
+                       curentstate = 4;
+                       profileOptionBtn.setText("Send Request");
+                       Toast.makeText(ProfileActivity.this, "Unfriend Successfully", Toast.LENGTH_SHORT).show();
+                   }
                }
                else
                {
