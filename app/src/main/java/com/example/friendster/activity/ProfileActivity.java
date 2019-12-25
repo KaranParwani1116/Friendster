@@ -3,7 +3,6 @@ package com.example.friendster.activity;
 import android.app.ActivityOptions;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
@@ -13,13 +12,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import androidx.viewpager.widget.ViewPager;
 
 import com.esafirm.imagepicker.features.ImagePicker;
@@ -75,6 +74,7 @@ public class ProfileActivity extends AppCompatActivity implements DialogInterfac
     RelativeLayout viewPagerLayout;
 
     ProfileViewPagerAdapter profileViewPagerAdapter;
+    CircularProgressDrawable circularProgressDrawable;
     File Compressedimagefile;
 
 
@@ -114,6 +114,12 @@ public class ProfileActivity extends AppCompatActivity implements DialogInterfac
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
 
+        //starting drawable
+        circularProgressDrawable = new CircularProgressDrawable(this);
+        circularProgressDrawable.setStrokeWidth(5f);
+        circularProgressDrawable.setCenterRadius(30f);
+        circularProgressDrawable.start();
+
         //fetching uid to display profile activity
         uid = getIntent().getStringExtra("uid");
 
@@ -136,9 +142,10 @@ public class ProfileActivity extends AppCompatActivity implements DialogInterfac
             curentstate = 5;
             profileOptionBtn.setText("Edit Profile");
 
-            loadprofile();
+            loadownprofile();
         } else {
             //we have opened our another person profile
+            LoadotherPersonProfile();
         }
 
         //edit profile button
@@ -149,6 +156,48 @@ public class ProfileActivity extends AppCompatActivity implements DialogInterfac
                 {
                     CharSequence options[] = new CharSequence[]{"Change Cover Profile", "Change Profile Picture"};
                     AlertDialog.Builder builder = CreateAlertdialog(options);
+                    AlertDialog alertDialog=builder.create();
+                    alertDialog.show();
+                }
+                else if(curentstate == 4)
+                {
+                    profileOptionBtn.setText("Processing...");
+                    profileOptionBtn.setEnabled(false);
+                    CharSequence options[] = new CharSequence[]{"Send Friend Request"};
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+                    builder.setOnDismissListener(ProfileActivity.this);
+                    builder.setTitle("Choose Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                           if(i==0)
+                           {
+                               performaction(curentstate);
+                           }
+                        }
+                    });
+
+                    AlertDialog alertDialog=builder.create();
+                    alertDialog.show();
+                }
+                else if(curentstate == 2)
+                {
+                    profileOptionBtn.setText("Processing...");
+                    profileOptionBtn.setEnabled(false);
+                    CharSequence options[] = new CharSequence[]{"Cancel Friend Request"};
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+                    builder.setOnDismissListener(ProfileActivity.this);
+                    builder.setTitle("Choose Options");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if(i==0)
+                            {
+                                performaction(curentstate);
+                            }
+                        }
+                    });
+
                     AlertDialog alertDialog=builder.create();
                     alertDialog.show();
                 }
@@ -178,11 +227,12 @@ public class ProfileActivity extends AppCompatActivity implements DialogInterfac
 
     @Override
     public void onDismiss(DialogInterface dialogInterface) {
+        profileOptionBtn.setEnabled(true);
 
     }
 
 
-    private void loadprofile() {
+    private void loadownprofile() {
         request Request = ApiClient.getApiClient().create(request.class);
         Map<String, String> param = new HashMap<>();
         param.put("userid", uid);
@@ -196,42 +246,13 @@ public class ProfileActivity extends AppCompatActivity implements DialogInterfac
                 mainBarLayout.setVisibility(View.VISIBLE);
                 viewPagerLayout.setVisibility(View.VISIBLE);
 
+
                 if (response.body() != null) {
-                    profileurl = response.body().getProfileUrl();
-                    coverurl = response.body().getCoverUrl();
-                    collapsingToolbar.setTitle(response.body().getName());
-
-                    if (!profileurl.isEmpty()) {
-                        Picasso.get().load(profileurl).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.progress).into(profileImage, new com.squareup.picasso.Callback() {
-                            @Override
-                            public void onSuccess() {
-
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-                                Picasso.get().load(profileurl).placeholder(R.drawable.progress).into(profileImage);
-                            }
-                        });
-                    }
-
-                    if (!coverurl.isEmpty()) {
-                        Picasso.get().load(coverurl).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.progress).into(profileCover, new com.squareup.picasso.Callback() {
-                            @Override
-                            public void onSuccess() {
-
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-                                Picasso.get().load(coverurl).placeholder(R.drawable.progress).into(profileCover);
-                            }
-                        });
-                    }
+                    loadprofile(response.body());
                 } else {
-                    Toast.makeText(ProfileActivity.this, "Something Went Wrong........Please try again later", Toast.LENGTH_SHORT).show();
-                }
-                addImageCoverClick();
+                Toast.makeText(ProfileActivity.this, "Something Went Wrong........Please try again later", Toast.LENGTH_SHORT).show();
+            }
+
             }
 
             @Override
@@ -369,6 +390,143 @@ public class ProfileActivity extends AppCompatActivity implements DialogInterfac
         }
         else {
             startActivity(intent);
+        }
+    }
+
+    private void loadprofile(User user)
+    {
+            profileurl = user.getProfileUrl();
+            coverurl = user.getCoverUrl();
+            collapsingToolbar.setTitle(user.getName());
+
+
+            if (!profileurl.isEmpty()) {
+                Picasso.get().load(profileurl).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.progress).into(profileImage, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Picasso.get().load(profileurl).placeholder(R.drawable.progress).into(profileImage);
+                    }
+                });
+            }
+
+            if (!coverurl.isEmpty()) {
+                Picasso.get().load(coverurl).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.progress).into(profileCover, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Picasso.get().load(coverurl).placeholder(R.drawable.progress).into(profileCover);
+                    }
+                });
+            }
+        addImageCoverClick();
+    }
+
+    private void LoadotherPersonProfile() {
+        Map<String, String>params =  new HashMap<>();
+        params.put("userid", FirebaseAuth.getInstance().getCurrentUser().getUid());
+        params.put("profileid", uid);
+        request Request = ApiClient.getApiClient().create(request.class);
+        Call<User>call = Request.otherprofile(params);
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                loadingProfileBar.setVisibility(View.INVISIBLE);
+                mainBarLayout.setVisibility(View.VISIBLE);
+                viewPagerLayout.setVisibility(View.VISIBLE);
+
+                if(response.body()!=null)
+                {
+                    loadprofile(response.body());
+
+                    if(response.body().getState().equalsIgnoreCase("4"))
+                    {
+                        curentstate = 4;
+                        profileOptionBtn.setText("Send Request");
+                    }
+                    else if(response.body().getState().equalsIgnoreCase("3"))
+                    {
+                        curentstate = 3;
+                        profileOptionBtn.setText("Accept Request");
+                    }
+                    else if(response.body().getState().equalsIgnoreCase("2"))
+                    {
+                        curentstate = 2;
+                        profileOptionBtn.setText("Cancel Request");
+                    }
+                    else if(response.body().getState().equalsIgnoreCase("1"))
+                    {
+                        curentstate = 1;
+                        profileOptionBtn.setText("Friends");
+                    }
+                    else {
+                        curentstate = 0;
+                        profileOptionBtn.setText("Error");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void performaction(final int i) {
+       request Request = ApiClient.getApiClient().create(request.class);
+       Call<Integer>call = Request.performAction(new PerformAction(i+"", FirebaseAuth.getInstance().getCurrentUser().getUid(), uid));
+       call.enqueue(new Callback<Integer>() {
+           @Override
+           public void onResponse(Call<Integer> call, Response<Integer> response) {
+               if(response.body()!=null)
+               {
+                   if(i==4)
+                   {
+                       curentstate=3;
+                       profileOptionBtn.setText("Requested");
+                       Toast.makeText(ProfileActivity.this, "Request Sent Successfully", Toast.LENGTH_SHORT).show();
+
+                   }
+                   else if(i==2)
+                   {
+                       curentstate = 4;
+                       profileOptionBtn.setText("Send Request");
+                       Toast.makeText(ProfileActivity.this, "Request cancelled successfully", Toast.LENGTH_SHORT).show();
+                   }
+
+               }
+               else
+               {
+                   profileOptionBtn.setEnabled(false);
+                   profileOptionBtn.setText("Error");
+               }
+           }
+
+           @Override
+           public void onFailure(Call<Integer> call, Throwable t) {
+
+           }
+       });
+    }
+
+
+    public class PerformAction{
+        String operationtype, userId, profileId;
+
+        public PerformAction(String operationtype, String userId, String profileId) {
+            this.operationtype = operationtype;
+            this.userId = userId;
+            this.profileId = profileId;
         }
     }
 }

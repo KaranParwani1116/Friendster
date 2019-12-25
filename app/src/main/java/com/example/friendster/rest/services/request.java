@@ -1,6 +1,7 @@
 package com.example.friendster.rest.services;
 
 import com.example.friendster.activity.Loginactivity;
+import com.example.friendster.activity.ProfileActivity;
 import com.example.friendster.model.User;
 
 import java.util.List;
@@ -29,6 +30,12 @@ public interface request {
 
     @GET("search")
     Call<List<User>>search(@QueryMap Map<String,String> params);
+
+    @GET("otherprofile")
+    Call<User>otherprofile(@QueryMap Map<String,String> params);
+
+    @POST("performAction")
+    Call<Integer>performAction(@Body ProfileActivity.PerformAction performAction);
 
 
 }
