@@ -43,6 +43,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp" />
 
+
+
     <TextView
         android:id="@+id/defaultTextView"
         android:layout_width="match_parent"
@@ -52,5 +54,8 @@
         android:textStyle="bold"
         android:textColor="#000"
         android:textSize="19sp"
+        android:visibility="gone"
         android:text="Hmm \n This space looks empty . \n Try adding some friends !" />
+
+
 </LinearLayout>

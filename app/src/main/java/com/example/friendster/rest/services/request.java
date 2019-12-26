@@ -2,6 +2,7 @@ package com.example.friendster.rest.services;
 
 import com.example.friendster.activity.Loginactivity;
 import com.example.friendster.activity.ProfileActivity;
+import com.example.friendster.model.FriendModel;
 import com.example.friendster.model.User;
 
 import java.util.List;
@@ -36,6 +37,9 @@ public interface request {
 
     @POST("performAction")
     Call<Integer>performAction(@Body ProfileActivity.PerformAction performAction);
+
+    @GET("loadfriends")
+    Call<FriendModel>loadfriends(@QueryMap Map<String, String>params);
 
 
 }
