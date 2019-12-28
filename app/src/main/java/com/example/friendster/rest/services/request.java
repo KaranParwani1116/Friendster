@@ -3,6 +3,7 @@ package com.example.friendster.rest.services;
 import com.example.friendster.activity.Loginactivity;
 import com.example.friendster.activity.ProfileActivity;
 import com.example.friendster.model.FriendModel;
+import com.example.friendster.model.PostModel;
 import com.example.friendster.model.User;
 
 import java.util.List;
@@ -41,5 +42,10 @@ public interface request {
     @GET("loadfriends")
     Call<FriendModel>loadfriends(@QueryMap Map<String, String>params);
 
+    @GET("profiletimeline")
+    Call<List<PostModel>>profileTimeline(@QueryMap Map<String, String>params);
+
+    @GET("gettimelinepost")
+    Call<List<PostModel>>gettimeline(@QueryMap Map<String, String>params);
 
 }
