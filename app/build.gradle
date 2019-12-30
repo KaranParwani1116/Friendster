@@ -65,4 +65,8 @@ dependencies {
 
     //photoview android
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
+    //parcel android
+    implementation 'org.parceler:parceler-api:1.1.12-SNAPSHOT'
+    annotationProcessor 'org.parceler:parceler:1.1.12-SNAPSHOT'
 }

@@ -3,6 +3,7 @@ package com.example.friendster.Frsgments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,8 @@ import retrofit2.Response;
 
 public class NewsFeedFragment extends Fragment {
 
+    private static final String TAG = "NewsFeedFragment";
+
     @BindView(R.id.newsfeed)
     RecyclerView newsfeed;
     @BindView(R.id.newsfeedProgressBar)
@@ -45,7 +48,7 @@ public class NewsFeedFragment extends Fragment {
 
     Unbinder unbinder;
 
-    int limit = 2;
+    int limit = 3;
     int offset = 0;
     boolean isfromstart = true;
 
@@ -89,6 +92,7 @@ public class NewsFeedFragment extends Fragment {
 
                 if( passvisibleitems + visibleitemcount >= (totalitemcount))
                 {
+                    Log.d(TAG,"scrolled");
                     isfromstart = false;
                     newsfeedProgressBar.setVisibility(View.VISIBLE);
                     offset = offset + limit;
@@ -106,6 +110,7 @@ public class NewsFeedFragment extends Fragment {
         isfromstart = true;
         offset = 0;
         loadtimeline();
+        Log.d(TAG,"onStart");
     }
 
     private void loadtimeline() {
@@ -151,7 +156,9 @@ public class NewsFeedFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        Log.d(TAG,"onPause");
         posts.clear();
+        offset=0;
         newsFeedAdapter.notifyDataSetChanged();
     }
 

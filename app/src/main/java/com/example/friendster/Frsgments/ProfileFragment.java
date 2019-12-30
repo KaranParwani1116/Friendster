@@ -3,6 +3,7 @@ package com.example.friendster.Frsgments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ public class ProfileFragment extends Fragment {
     ProgressBar newsfeedProgressBar;
     Unbinder unbinder;
 
-    int limit = 2;
+    int limit = 3;
     int offset = 0;
     boolean isfromstart = true;
 
@@ -72,7 +73,7 @@ public class ProfileFragment extends Fragment {
         unbinder = ButterKnife.bind(this,view);
 
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         newsfeed.setLayoutManager(linearLayoutManager);
 
         newsFeedAdapter = new NewsFeedAdapter(context, posts);
@@ -153,9 +154,11 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG,"onPause");
         posts.clear();
+        offset=0;
         newsFeedAdapter.notifyDataSetChanged();
     }
 

@@ -1,6 +1,8 @@
 package com.example.friendster.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +15,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.friendster.R;
+import com.example.friendster.activity.FullPostActivity;
 import com.example.friendster.model.PostModel;
 import com.example.friendster.rest.ApiClient;
+import com.example.friendster.utils.AgoDateParse;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import org.parceler.Parcels;
+
+import java.text.ParseException;
 import java.util.List;
 
 import butterknife.BindView;
@@ -97,6 +104,23 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.Viewho
         {
             holder.statusImage.setVisibility(View.GONE);
         }
+
+        try {
+            holder.date.setText(AgoDateParse.getTimeAgo(AgoDateParse.getTimeInMillsecond(postModel.getStatusTime())));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, FullPostActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("postModel", Parcels.wrap(postModel));
+                intent.putExtra("postBundle",bundle);
+                context.startActivity(intent);
+            }
+        });
 
     }
 

@@ -12,9 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/customTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.SearchActivity">
-
-        </activity>
+        <activity android:name=".activity.FullPostActivity"></activity>
+        <activity android:name=".activity.SearchActivity"></activity>
         <activity android:name=".activity.FullImageActivity" />
         <activity android:name=".activity.UploadActivty" />
         <activity android:name=".activity.ProfileActivity" />
