@@ -2,6 +2,7 @@ package com.example.friendster.rest.services;
 
 import com.example.friendster.activity.Loginactivity;
 import com.example.friendster.activity.ProfileActivity;
+import com.example.friendster.adapter.NewsFeedAdapter;
 import com.example.friendster.model.FriendModel;
 import com.example.friendster.model.PostModel;
 import com.example.friendster.model.User;
@@ -48,4 +49,6 @@ public interface request {
     @GET("gettimelinepost")
     Call<List<PostModel>>gettimeline(@QueryMap Map<String, String>params);
 
+    @POST("likeunlike")
+    Call<Integer> likeunlike(@Body NewsFeedAdapter.Addlike addlike);
 }

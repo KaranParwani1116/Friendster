@@ -20,6 +20,7 @@ import com.example.friendster.adapter.NewsFeedAdapter;
 import com.example.friendster.model.PostModel;
 import com.example.friendster.rest.ApiClient;
 import com.example.friendster.rest.services.request;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,8 @@ import butterknife.Unbinder;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static java.lang.Math.abs;
 
 
 public class ProfileFragment extends Fragment {
@@ -91,7 +94,7 @@ public class ProfileFragment extends Fragment {
                 int passvisibleitems = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
 
 
-                if( passvisibleitems + visibleitemcount >= (totalitemcount))
+                if( abs(passvisibleitems) + visibleitemcount == (totalitemcount))
                 {
                     isfromstart = false;
                     newsfeedProgressBar.setVisibility(View.VISIBLE);
@@ -116,6 +119,7 @@ public class ProfileFragment extends Fragment {
         request Request = ApiClient.getApiClient().create(request.class);
 
         Map<String, String> map = new HashMap<>();
+        map.put("onlineid", FirebaseAuth.getInstance().getCurrentUser().getUid());
         map.put("uid",uid);
         map.put("limit",limit+"");
         map.put("offset",offset+"");

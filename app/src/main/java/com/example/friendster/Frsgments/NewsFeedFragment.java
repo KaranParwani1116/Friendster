@@ -34,6 +34,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static java.lang.Math.abs;
+
 
 public class NewsFeedFragment extends Fragment {
 
@@ -89,8 +91,12 @@ public class NewsFeedFragment extends Fragment {
                 int totalitemcount = linearLayoutManager.getItemCount();
                 int passvisibleitems = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
 
+                Log.d(TAG,posts.size()+"");
+                Log.d(TAG+"p",passvisibleitems+"");
+                Log.d(TAG + "v",visibleitemcount+"");
+                Log.d(TAG+"t",totalitemcount+"");
 
-                if( passvisibleitems + visibleitemcount >= (totalitemcount))
+                if( abs(passvisibleitems) + visibleitemcount == (totalitemcount))
                 {
                     Log.d(TAG,"scrolled");
                     isfromstart = false;

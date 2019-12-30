@@ -46,6 +46,18 @@ public class PostModel {
     @Expose
     private String userToken;
 
+    @SerializedName("isLiked")
+    @Expose
+    private boolean isLiked;
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
+    }
+
     public String getPostid() {
         return postid;
     }
