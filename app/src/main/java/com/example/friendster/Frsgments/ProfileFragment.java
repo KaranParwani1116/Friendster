@@ -94,7 +94,7 @@ public class ProfileFragment extends Fragment {
                 int passvisibleitems = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
 
 
-                if( abs(passvisibleitems) + visibleitemcount == (totalitemcount))
+                if( abs(passvisibleitems)  + visibleitemcount == (totalitemcount))
                 {
                     isfromstart = false;
                     newsfeedProgressBar.setVisibility(View.VISIBLE);

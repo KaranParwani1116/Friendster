@@ -13,14 +13,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.friendster.Frsgments.bottomsheets.CommentBottomSheet;
 import com.example.friendster.R;
 import com.example.friendster.activity.FullPostActivity;
 import com.example.friendster.model.PostModel;
 import com.example.friendster.rest.ApiClient;
 import com.example.friendster.rest.services.request;
 import com.example.friendster.utils.AgoDateParse;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
@@ -211,6 +214,20 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.Viewho
                         }
                     });
                 }
+            }
+        });
+
+        //comment section
+
+        holder.commentSection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BottomSheetDialogFragment bottomSheetDialogFragment=new CommentBottomSheet();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("postModel",Parcels.wrap(postModel));
+                bottomSheetDialogFragment.setArguments(bundle);
+                FragmentActivity fragmentActivity = (FragmentActivity)context;
+                bottomSheetDialogFragment.show(fragmentActivity.getSupportFragmentManager(),"commentFragment");
             }
         });
 
