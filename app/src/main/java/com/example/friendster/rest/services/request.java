@@ -56,4 +56,10 @@ public interface request {
 
     @POST("postcomment")
     Call<CommentModel> poatcomment(@Body CommentBottomSheet.Addcomment addcomment);
+
+    @GET("retrivetopcomment")
+    Call<CommentModel> retrievetoplevelcomment(@QueryMap Map<String , String>params);
+
+    @GET("retrivelowlevelcomment")
+    Call<List<CommentModel.Comment>> subcomment(@QueryMap Map<String , String>params);
 }

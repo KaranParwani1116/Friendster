@@ -4,6 +4,8 @@ package com.example.friendster.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 import java.util.List;
 
 
@@ -50,33 +52,8 @@ public class CommentModel {
 
     }
 
-    public class SubComments {
-
-        @SerializedName("total")
-        @Expose
-        private Integer total;
-        @SerializedName("lastComment")
-        @Expose
-        private List<Object> lastComment = null;
-
-        public Integer getTotal() {
-            return total;
-        }
-
-        public void setTotal(Integer total) {
-            this.total = total;
-        }
-
-        public List<Object> getLastComment() {
-            return lastComment;
-        }
-
-        public void setLastComment(List<Object> lastComment) {
-            this.lastComment = lastComment;
-        }
-
-    }
-    public class Comment {
+    @Parcel
+    public static class Comment {
 
         @SerializedName("cid")
         @Expose
@@ -198,6 +175,98 @@ public class CommentModel {
 
         public void setUserToken(String userToken) {
             this.userToken = userToken;
+        }
+
+    }
+
+    public class SubComments {
+
+        @SerializedName("total")
+        @Expose
+        private Integer total;
+
+        @SerializedName("lastComment")
+        @Expose
+        private List<LastComment> lastComment = null;
+
+        public Integer getTotal() {
+            return total;
+        }
+
+        public void setTotal(Integer total) {
+            this.total = total;
+        }
+
+        public List<LastComment> getLastComment() {
+            return lastComment;
+        }
+
+        public void setLastComment(List<LastComment> lastComment) {
+            this.lastComment = lastComment;
+        }
+
+    }
+
+    public class LastComment {
+
+        @SerializedName("comment")
+        @Expose
+        private String comment;
+
+        @SerializedName("commentBy")
+        @Expose
+        private String commentBy;
+
+        @SerializedName("commentDate")
+        @Expose
+        private String commentDate;
+
+        @SerializedName("name")
+        @Expose
+        private String name;
+
+        @SerializedName("profileUrl")
+        @Expose
+        private String profileUrl;
+
+        public String getComment() {
+            return comment;
+        }
+
+        public void setComment(String comment) {
+            this.comment = comment;
+        }
+
+        public String getCommentBy() {
+            return commentBy;
+        }
+
+        public void setCommentBy(String commentBy) {
+            this.commentBy = commentBy;
+        }
+
+        public String getCommentDate() {
+            return commentDate;
+        }
+
+        public void setCommentDate(String commentDate) {
+            this.commentDate = commentDate;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getProfileUrl() {
+            return profileUrl;
+        }
+
+        public void setProfileUrl(String profileUrl) {
+            this.profileUrl = profileUrl;
         }
 
     }

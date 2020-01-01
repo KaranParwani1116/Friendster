@@ -57,6 +57,7 @@ public class NewsFeedFragment extends Fragment {
     List<PostModel> posts = new ArrayList<>();
 
     NewsFeedAdapter newsFeedAdapter;
+    int commentcount=-1;
 
     public NewsFeedFragment() {
 
@@ -110,6 +111,16 @@ public class NewsFeedFragment extends Fragment {
         return view;
     }
 
+    public void UpdateCommentCount(int CommentCount)
+    {
+        Log.d("News Feed","Update comment count called");
+
+        posts.clear();
+        isfromstart=true;
+        offset=0;
+        loadtimeline();
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -120,6 +131,7 @@ public class NewsFeedFragment extends Fragment {
     }
 
     private void loadtimeline() {
+        Log.d("loadtimeline","invoked");
         request Request = ApiClient.getApiClient().create(request.class);
 
         Map<String, String> map = new HashMap<>();
@@ -173,4 +185,5 @@ public class NewsFeedFragment extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
 }

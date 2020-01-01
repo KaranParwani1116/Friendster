@@ -2,6 +2,7 @@ package com.example.friendster.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,7 +19,12 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.friendster.Frsgments.FriendsFragment;
+import com.example.friendster.Frsgments.NewsFeedFragment;
+import com.example.friendster.Frsgments.NotificationFragment;
+import com.example.friendster.Interface.CommentInterface;
 import com.example.friendster.R;
+import com.example.friendster.utils.BottomNavigationViewHelper;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -28,14 +34,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
-import com.example.friendster.Frsgments.FriendsFragment;
-import com.example.friendster.Frsgments.NewsFeedFragment;
-import com.example.friendster.Frsgments.NotificationFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.example.friendster.utils.BottomNavigationViewHelper;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CommentInterface {
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
     @BindView(R.id.search)
@@ -200,4 +202,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void callbackMethod(int CommentCount) {
+      //sending the comment count rom bottom sheet
+
+        Log.d("NewsFeed Fragment",CommentCount+"");
+      newsFeedFragment.UpdateCommentCount(CommentCount);
+    }
 }

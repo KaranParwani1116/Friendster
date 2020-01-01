@@ -42,6 +42,7 @@ import retrofit2.Response;
 public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.Viewholder> {
     Context context;
     List<PostModel> posts;
+    int commentcount;
 
 
     public NewsFeedAdapter(Context context, List<PostModel> posts) {
@@ -165,6 +166,9 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.Viewho
                                         operationunlike(holder,postModel);
                                         Toast.makeText(context,"Something went wrong...",Toast.LENGTH_SHORT).show();
                                     }
+                                    else {
+
+                                    }
                                 }
                                 else
                                 {
@@ -243,7 +247,26 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.Viewho
             }
         });
 
+        if(postModel.getHasComment().equals("1"))
+        {
+            if(postModel.getCommentCount().equals("1"))
+            {
+                holder.commentTxt.setText("1 Comment");
+            }
+            else
+            {
+                int commentcount = Integer.parseInt(postModel.getCommentCount());
+
+                holder.commentTxt.setText(commentcount + " Comments");
+            }
+        }
+        else
+        {
+            holder.commentTxt.setText("0 Comment");
+        }
+
     }
+
 
     @Override
     public int getItemCount() {
@@ -255,6 +278,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.Viewho
         holder.likeImg.setImageResource(R.drawable.icon_like_selected);
         int count = Integer.parseInt(postModel.getLikeCount());
         count++;
+        postModel.setLiked(true);
+        postModel.setLikeCount(count+"");
 
         if(count==0 || count==1)
         {
@@ -322,7 +347,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.Viewho
         }
     }
 
-    public class Addlike{
+    public static class Addlike{
         String userId,postId,contentOwnerId;
         int operationType;
 
