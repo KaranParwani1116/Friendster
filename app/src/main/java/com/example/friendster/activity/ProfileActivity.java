@@ -23,6 +23,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.model.Image;
+import com.example.friendster.Frsgments.ProfileFragment;
+import com.example.friendster.Interface.ProfileCommentInterface;
 import com.example.friendster.R;
 import com.example.friendster.adapter.ProfileViewPagerAdapter;
 import com.example.friendster.model.User;
@@ -50,7 +52,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProfileActivity extends AppCompatActivity implements DialogInterface.OnDismissListener {
+public class ProfileActivity extends AppCompatActivity implements DialogInterface.OnDismissListener, ProfileCommentInterface {
     private static final String TAG = "ProfileActivity";
 
 
@@ -76,6 +78,7 @@ public class ProfileActivity extends AppCompatActivity implements DialogInterfac
     ProfileViewPagerAdapter profileViewPagerAdapter;
     CircularProgressDrawable circularProgressDrawable;
     File Compressedimagefile;
+    ProfileFragment profileFragment = null;
 
 
     String uid = "0";
@@ -531,6 +534,14 @@ public class ProfileActivity extends AppCompatActivity implements DialogInterfac
 
             }
         });
+    }
+
+    @Override
+    public void call(int CommentCount) {
+       profileFragment = (ProfileFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.ViewPager_profile + ":" + ViewPagerProfile.getCurrentItem());
+
+
+       profileFragment.UpdateCommentCount(CommentCount);
     }
 
 

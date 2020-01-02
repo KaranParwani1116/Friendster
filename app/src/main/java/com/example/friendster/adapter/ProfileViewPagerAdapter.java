@@ -14,6 +14,7 @@ public class ProfileViewPagerAdapter extends FragmentPagerAdapter {
     private int size=0;
     String uid="0";
     String current_state="0";
+    private Fragment currentfragment;
 
     public ProfileViewPagerAdapter(@NonNull FragmentManager fm, int size,String uid, String current_state) {
         super(fm);
@@ -58,4 +59,5 @@ public class ProfileViewPagerAdapter extends FragmentPagerAdapter {
 
         }
     }
+
 }

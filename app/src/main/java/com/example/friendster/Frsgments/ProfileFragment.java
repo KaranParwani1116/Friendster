@@ -107,6 +107,14 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
+    public void UpdateCommentCount(int CommentCount){
+        isfromstart=false;
+        offset=0;
+        posts.clear();
+
+        loadprofilepost();
+    }
+
     @Override
     public void onStart() {
         super.onStart();

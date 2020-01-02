@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.friendster.Interface.CommentInterface;
+import com.example.friendster.Interface.ProfileCommentInterface;
 import com.example.friendster.R;
 import com.example.friendster.adapter.CommentAdapter;
 import com.example.friendster.model.CommentModel;
@@ -76,7 +77,8 @@ public class CommentBottomSheet extends BottomSheetDialogFragment {
 
     private Context context;
     private PostModel postModel;
-    private CommentInterface commentInterface;
+    private CommentInterface commentInterface=null;
+    private ProfileCommentInterface profileCommentInterface=null;
 
     private CommentAdapter commentAdapter;
 
@@ -89,9 +91,20 @@ public class CommentBottomSheet extends BottomSheetDialogFragment {
         if(context instanceof CommentInterface)
         {
             commentInterface = (CommentInterface)context;
-        }else{
+        }else if(context instanceof ProfileCommentInterface)
+        {
+            profileCommentInterface=(ProfileCommentInterface)context;
+        }
+        else{
             throw new RuntimeException(context.toString() + "must implement comment interface");
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        commentInterface=null;
+        profileCommentInterface=null;
     }
 
     @Override
@@ -173,7 +186,12 @@ public class CommentBottomSheet extends BottomSheetDialogFragment {
                                 commentcount++;
 
                                 //updating the comment count in news feed fragment
-                                commentInterface.callbackMethod(commentcount);
+                                if(commentInterface!=null) {
+                                    commentInterface.callbackMethod(commentcount);
+                                }else if(profileCommentInterface!=null)
+                                {
+                                    profileCommentInterface.call(commentcount);
+                                }
 
                                 commentsTxt.setText(commentcount + " Comments");
                                 results.add(response.body().getResult().get(0));
