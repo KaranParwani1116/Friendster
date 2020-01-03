@@ -19,9 +19,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.friendster.Frsgments.FriendsFragment;
-import com.example.friendster.Frsgments.NewsFeedFragment;
-import com.example.friendster.Frsgments.NotificationFragment;
+import com.example.friendster.Fragments.FriendsFragment;
+import com.example.friendster.Fragments.NewsFeedFragment;
+import com.example.friendster.Fragments.NotificationFragment;
 import com.example.friendster.Interface.CommentInterface;
 import com.example.friendster.R;
 import com.example.friendster.utils.BottomNavigationViewHelper;
@@ -88,9 +88,6 @@ public class MainActivity extends AppCompatActivity implements CommentInterface 
         //intitalize fragment
         initializefragment();
 
-        //intitalfragment
-
-        setFragment(newsFeedFragment);
 
         onclicklistenerbottomnavigation();
 
@@ -99,6 +96,26 @@ public class MainActivity extends AppCompatActivity implements CommentInterface 
         //setting click listener for searchview
 
         searchclicklistener();
+
+        Bundle bundle = getIntent().getExtras();
+        String isFromNotification = "false";
+
+        if(bundle!=null)
+        {
+            isFromNotification = getIntent().getExtras().getString("isFromNotification","false");
+
+            if(isFromNotification.equals("true"))
+            {
+                bottomNavigation.getMenu().findItem(R.id.profile_notification).setChecked(true);
+                setFragment(notificationFragment);
+            }
+            else {
+                setFragment(newsFeedFragment);
+            }
+        }
+        else {
+            setFragment(newsFeedFragment);
+        }
     }
 
 

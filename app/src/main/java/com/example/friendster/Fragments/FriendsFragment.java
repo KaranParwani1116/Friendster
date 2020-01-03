@@ -1,4 +1,4 @@
-package com.example.friendster.Frsgments;
+package com.example.friendster.Fragments;
 
 
 import android.content.Context;

@@ -14,7 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.friendster.Frsgments.bottomsheets.CommentBottomSheet;
+import com.example.friendster.Fragments.bottomsheets.CommentBottomSheet;
 import com.example.friendster.R;
 import com.example.friendster.adapter.NewsFeedAdapter;
 import com.example.friendster.model.PostModel;
@@ -30,6 +30,8 @@ import com.squareup.picasso.Picasso;
 import org.parceler.Parcels;
 
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,6 +80,8 @@ public class FullPostActivity extends AppCompatActivity {
     RelativeLayout topHideShow;
 
     PostModel postModel;
+    boolean isLoadFromNetwrok=false;
+    String postid = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,13 +89,19 @@ public class FullPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_full_post);
         ButterKnife.bind(this);
 
-        postModel = Parcels.unwrap(getIntent().getBundleExtra("postBundle").getParcelable("postModel"));
 
-        if (postModel == null) {
-            Toast.makeText(this, "Something Went Wrong...", Toast.LENGTH_SHORT).show();
-            onBackPressed();
-            finish();
+        isLoadFromNetwrok = getIntent().getBundleExtra("postBundle").getBoolean("isLoadFromNetwork",false);
+        postid = getIntent().getBundleExtra("postBundle").getString("postid","0");
+
+        if(isLoadFromNetwrok)
+        {
+            loadfromnetwork();
+
+        }else{
+            postModel = Parcels.unwrap(getIntent().getBundleExtra("postBundle").getParcelable("postModel"));
+            setData(postModel);
         }
+
 
         setSupportActionBar(toolbar);
         toolbar.setTitle("");
@@ -103,7 +113,34 @@ public class FullPostActivity extends AppCompatActivity {
             }
         });
 
-        setData(postModel);
+
+    }
+
+    private void loadfromnetwork() {
+
+        Map<String,String>params = new HashMap<>();
+        params.put("uid",FirebaseAuth.getInstance().getCurrentUser().getUid());
+        params.put("postId",postid);
+
+        request Request = ApiClient.getApiClient().create(request.class);
+        Call<PostModel>call = Request.getPost(params);
+
+        call.enqueue(new retrofit2.Callback<PostModel>() {
+            @Override
+            public void onResponse(Call<PostModel> call, Response<PostModel> response) {
+                if(response.body()!=null){
+                    setData(response.body());
+                }else{
+                    Toast.makeText(FullPostActivity.this,"Something went wrong",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<PostModel> call, Throwable t) {
+                Toast.makeText(FullPostActivity.this,"Something went wrong",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setData(PostModel postModel) {

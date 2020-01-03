@@ -1,11 +1,12 @@
 package com.example.friendster.rest.services;
 
-import com.example.friendster.Frsgments.bottomsheets.CommentBottomSheet;
+import com.example.friendster.Fragments.bottomsheets.CommentBottomSheet;
 import com.example.friendster.activity.Loginactivity;
 import com.example.friendster.activity.ProfileActivity;
 import com.example.friendster.adapter.NewsFeedAdapter;
 import com.example.friendster.model.CommentModel;
 import com.example.friendster.model.FriendModel;
+import com.example.friendster.model.NotificationModel;
 import com.example.friendster.model.PostModel;
 import com.example.friendster.model.User;
 
@@ -62,4 +63,10 @@ public interface request {
 
     @GET("retrivelowlevelcomment")
     Call<List<CommentModel.Comment>> subcomment(@QueryMap Map<String , String>params);
+
+    @GET("getnotification")
+    Call<List<NotificationModel>> getnotification(@QueryMap Map<String , String>params);
+
+    @GET("details")
+    Call<PostModel> getPost(@QueryMap Map<String , String>params);
 }

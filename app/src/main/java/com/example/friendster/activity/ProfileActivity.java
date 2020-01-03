@@ -23,7 +23,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.model.Image;
-import com.example.friendster.Frsgments.ProfileFragment;
+import com.example.friendster.Fragments.ProfileFragment;
 import com.example.friendster.Interface.ProfileCommentInterface;
 import com.example.friendster.R;
 import com.example.friendster.adapter.ProfileViewPagerAdapter;

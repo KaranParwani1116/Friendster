@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.friendster.Frsgments.bottomsheets.SubcommentBottomSheet;
+import com.example.friendster.Fragments.bottomsheets.SubcommentBottomSheet;
 import com.example.friendster.R;
 import com.example.friendster.model.CommentModel;
 import com.example.friendster.model.PostModel;

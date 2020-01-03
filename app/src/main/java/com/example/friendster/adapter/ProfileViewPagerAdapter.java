@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.friendster.Frsgments.ProfileFragment;
+import com.example.friendster.Fragments.ProfileFragment;
 
 public class ProfileViewPagerAdapter extends FragmentPagerAdapter {
     private int size=0;

@@ -1,4 +1,4 @@
-package com.example.friendster.Frsgments;
+package com.example.friendster.Fragments;
 
 
 import android.content.Context;
@@ -37,14 +37,17 @@ import retrofit2.Response;
 import static java.lang.Math.abs;
 
 
-public class ProfileFragment extends Fragment {
+public class NewsFeedFragment extends Fragment {
 
-    private static final String TAG = "ProfileFragment";
+    private static final String TAG = "NewsFeedFragment";
+
     @BindView(R.id.newsfeed)
     RecyclerView newsfeed;
-    private Context context;
     @BindView(R.id.newsfeedProgressBar)
     ProgressBar newsfeedProgressBar;
+
+    private Context context;
+
     Unbinder unbinder;
 
     int limit = 3;
@@ -54,11 +57,9 @@ public class ProfileFragment extends Fragment {
     List<PostModel> posts = new ArrayList<>();
 
     NewsFeedAdapter newsFeedAdapter;
+    int commentcount=-1;
 
-    String uid = "0";
-    String current_state = "0";
-
-    public ProfileFragment() {
+    public NewsFeedFragment() {
 
     }
 
@@ -71,19 +72,17 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_news_feed, container, false);
+
         unbinder = ButterKnife.bind(this,view);
 
 
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         newsfeed.setLayoutManager(linearLayoutManager);
 
         newsFeedAdapter = new NewsFeedAdapter(context, posts);
         newsfeed.setAdapter(newsFeedAdapter);
-
-        uid = getArguments().getString("uid");
-        current_state = getArguments().getString("current_state");
 
         newsfeed.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -93,13 +92,18 @@ public class ProfileFragment extends Fragment {
                 int totalitemcount = linearLayoutManager.getItemCount();
                 int passvisibleitems = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
 
+                Log.d(TAG,posts.size()+"");
+                Log.d(TAG+"p",passvisibleitems+"");
+                Log.d(TAG + "v",visibleitemcount+"");
+                Log.d(TAG+"t",totalitemcount+"");
 
-                if( abs(passvisibleitems)  + visibleitemcount == (totalitemcount))
+                if( abs(passvisibleitems) + visibleitemcount == (totalitemcount))
                 {
+                    Log.d(TAG,"scrolled");
                     isfromstart = false;
                     newsfeedProgressBar.setVisibility(View.VISIBLE);
                     offset = offset + limit;
-                    loadprofilepost();
+                    loadtimeline();
                 }
             }
         });
@@ -107,12 +111,14 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    public void UpdateCommentCount(int CommentCount){
-        isfromstart=false;
-        offset=0;
-        posts.clear();
+    public void UpdateCommentCount(int CommentCount)
+    {
+        Log.d("News Feed","Update comment count called");
 
-        loadprofilepost();
+        posts.clear();
+        isfromstart=true;
+        offset=0;
+        loadtimeline();
     }
 
     @Override
@@ -120,20 +126,20 @@ public class ProfileFragment extends Fragment {
         super.onStart();
         isfromstart = true;
         offset = 0;
-        loadprofilepost();
+        loadtimeline();
+        Log.d(TAG,"onStart");
     }
 
-    private void loadprofilepost() {
+    private void loadtimeline() {
+        Log.d("loadtimeline","invoked");
         request Request = ApiClient.getApiClient().create(request.class);
 
         Map<String, String> map = new HashMap<>();
-        map.put("onlineid", FirebaseAuth.getInstance().getCurrentUser().getUid());
-        map.put("uid",uid);
+        map.put("uid", FirebaseAuth.getInstance().getCurrentUser().getUid());
         map.put("limit",limit+"");
         map.put("offset",offset+"");
-        map.put("current_state",current_state);
 
-        Call<List<PostModel>> call = Request.profileTimeline(map);
+        Call<List<PostModel>> call = Request.gettimeline(map);
 
         call.enqueue(new Callback<List<PostModel>>() {
             @Override
@@ -174,11 +180,10 @@ public class ProfileFragment extends Fragment {
         newsFeedAdapter.notifyDataSetChanged();
     }
 
-
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
+
 }
