@@ -1,7 +1,7 @@
 # Friendster
 # A Social Networking app
-#use of slim framework
-#Rest api implementation through php
+# use of slim framework
+# Rest api implementation through php
 
 <img src = "https://github.com/KaranParwani1116/Friendster/blob/master/Screenshot_2020-01-07-18-50-30-846_com.example.friendster.png" width="250"
 height="400"> | <img src = "https://github.com/KaranParwani1116/Friendster/blob/master/Screenshot_2020-01-07-18-50-34-396_com.example.friendster.png" width="250"
