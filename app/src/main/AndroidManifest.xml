@@ -12,18 +12,20 @@
         android:supportsRtl="true"
         android:theme="@style/customTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".activity.SignupActivity"></activity>
+
         <service android:name=".FirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <activity android:name=".activity.FullPostActivity"></activity>
-        <activity android:name=".activity.SearchActivity"></activity>
+
+        <activity android:name=".activity.FullPostActivity" />
+        <activity android:name=".activity.SearchActivity" />
         <activity android:name=".activity.FullImageActivity" />
         <activity android:name=".activity.UploadActivty" />
         <activity android:name=".activity.ProfileActivity" />
         <activity android:name=".activity.Loginactivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

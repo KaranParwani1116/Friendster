@@ -28,6 +28,9 @@ import com.google.firebase.iid.InstanceIdResult;
 
 import com.example.friendster.rest.ApiClient;
 import com.example.friendster.rest.services.request;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,6 +47,7 @@ public class Loginactivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginactivity);
+        ButterKnife.bind(this);
 
         signInButton=(ImageView) findViewById(R.id.signinbutton);
 
@@ -67,6 +71,8 @@ public class Loginactivity extends AppCompatActivity {
                 signin();
             }
         });
+
+
     }
 
     private void signin() {
@@ -91,6 +97,12 @@ public class Loginactivity extends AppCompatActivity {
                 // ...
             }
         }
+    }
+
+    @OnClick(R.id.signup)
+    public void gotoSignup(View view) {
+        Intent intent = new Intent(Loginactivity.this, SignupActivity.class);
+        startActivity(intent);
     }
 
     @Override
